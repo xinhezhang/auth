@@ -19,10 +19,10 @@ export default class LoginForm extends Component {
     });
     // https://firebase.google.com/docs/auth/web/password-auth
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .catch((error) => {
-        console.log(error.message);
+      .catch(({ code, message }) => {
+        console.log(`${code}: ${message}`);
         this.setState({
-          error: error.message,
+          error: message,
         });
       }
     );
@@ -36,10 +36,10 @@ export default class LoginForm extends Component {
     });
     // https://firebase.google.com/docs/auth/web/password-auth
     firebase.auth().signInWithEmailAndPassword(email, password)
-      .catch((error) => {
-        console.log(error.message);
+      .catch(({ code, message }) => {
+        console.log(`${code}: ${message}`);
         this.setState({
-          error: error.message,
+          error: message,
         });
       }
     );
