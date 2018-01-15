@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import firebase from 'firebase';
 
+import * as FIREBASE_API_KEY from './firebase_api_key';
+
 import { Header, Button, CardSection, Spinner } from './components/common';
 import LoginForm from './components/LoginForm';
 
@@ -15,14 +17,7 @@ export default class App extends Component {
 
   componentWillMount() {
     // initialize firebase using given configuration
-    firebase.initializeApp({
-      apiKey: 'AIzaSyBoSUlrivmk1--pSyzlIBTuilUpChu2Qzs',
-      authDomain: 'auth-react-native-xinhezhang.firebaseapp.com',
-      databaseURL: 'https://auth-react-native-xinhezhang.firebaseio.com',
-      projectId: 'auth-react-native-xinhezhang',
-      storageBucket: 'auth-react-native-xinhezhang.appspot.com',
-      messagingSenderId: '222003941114'
-    });
+    firebase.initializeApp(FIREBASE_API_KEY);
 
     // sign in <-> sign out
     firebase.auth().onAuthStateChanged((user) => {
