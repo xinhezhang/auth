@@ -12,6 +12,7 @@ export default class LoginForm extends Component {
       <Card>
         <CardSection>
           <Input
+            label="Email"
             value={this.state.text}
             onChangeText={text => this.setState({ text })}
           />
