@@ -48,6 +48,7 @@ class LoginForm extends Component {
   }
 
   onSignupSuccess() {
+    console.log('Signup success.');
     this.setState({
       email: '',
       password: '',
@@ -57,6 +58,7 @@ class LoginForm extends Component {
   }
 
   onLoginSuccess() {
+    console.log('Login success.');
     this.setState({
       email: '',
       password: '',
@@ -65,16 +67,18 @@ class LoginForm extends Component {
     });
   }
 
-  onSignupFail() {
+  onSignupFail({ code, message }) {
+    console.log(`${code}: ${message}`);
     this.setState({
-      error: 'Signup Failed.',
+      error: message,
       signupLoading: false,
     });
   }
 
-  onLoginFail() {
+  onLoginFail({ code, message }) {
+    console.log(`${code}: ${message}`);
     this.setState({
-      error: 'Login Failed.',
+      error: message,
       loginLoading: false,
     });
   }
