@@ -13,10 +13,10 @@ export default class LoginForm extends Component {
       <Card>
         <CardSection>
           <Input
-            label="Email"
+            label='Email'
             value={this.state.email}
             onChangeText={email => this.setState({ email })}
-            placeholder="test@gmail.com"
+            placeholder='test@gmail.com'
           />
         </CardSection>
 
