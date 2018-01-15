@@ -24,8 +24,8 @@ const Input = ({ label, value, onChangeText, placeholder, secureTextEntry }) => 
 // Whenever we have siblings on the "flex" property,
 // it will count total of the whole container and then apply to each of them.
 // Ex:
-// "inputStyle" = 2 / (1 + 2) = 2/3 of space
-// "labelStyle" = 1 / (1 + 2) = 1/3 of space
+// "inputStyle" = 3 / (1 + 3) = 3/4 of space
+// "labelStyle" = 1 / (1 + 3) = 1/4 of space
 const styles = {
   inputStyle: {
     color: '#000',
@@ -33,11 +33,12 @@ const styles = {
     paddingRight: 5,
     fontSize: 18,
     lineHeight: 23,
-    flex: 2,
+    flex: 3,
   },
   labelStyle: {
     fontSize: 18,
-    paddingLeft: 20,
+    fontWeight: '600',
+    paddingLeft: 5,
     flex: 1,
   },
   containerStyle: {
