@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Text } from 'react-native';
+import firebase from 'firebase';
 
 import { Button, Card, CardSection, Input } from './common';
 
@@ -6,7 +8,42 @@ export default class LoginForm extends Component {
   state = {
     email: '',
     password: '',
+    error: '',
   };
+
+  onSignupBtnPress() {
+    const { email, password } = this.state;
+    // clear error message
+    this.setState({
+      error: '',
+    });
+    // https://firebase.google.com/docs/auth/web/password-auth
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .catch((error) => {
+        console.log(error.message);
+        this.setState({
+          error: error.message,
+        });
+      }
+    );
+  }
+
+  onLoginBtnPress() {
+    const { email, password } = this.state;
+    // clear error message
+    this.setState({
+      error: '',
+    });
+    // https://firebase.google.com/docs/auth/web/password-auth
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .catch((error) => {
+        console.log(error.message);
+        this.setState({
+          error: error.message,
+        });
+      }
+    );
+  }
 
   render() {
     return (
@@ -31,10 +68,28 @@ export default class LoginForm extends Component {
           />
         </CardSection>
 
+        <Text style={styles.errorTextStyle}>
+          {this.state.error}
+        </Text>
+
         <CardSection>
-          <Button>Login</Button>
+          <Button onPress={this.onSignupBtnPress.bind(this)}>
+            Signup
+          </Button>
+          <Button onPress={this.onLoginBtnPress.bind(this)}>
+            Login
+          </Button>
         </CardSection>
       </Card>
     );
   }
 }
+
+
+const styles = {
+  errorTextStyle: {
+    fontSize: 20,
+    alignSelf: 'center',
+    color: 'red',
+  },
+};
