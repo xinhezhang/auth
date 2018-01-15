@@ -1,88 +1,101 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 import firebase from 'firebase';
-
 import { Button, Card, CardSection, Input, Spinner } from './common';
 
-export default class LoginForm extends Component {
-  state = {
-    email: '',
-    password: '',
-    error: '',
-    loading: false,
-  };
+class LoginForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+      error: '',
+      signupLoading: false,
+      loginLoading: false,
+    };
+    this.onSignupButtonPress = this.onSignupButtonPress.bind(this);
+    this.onLoginButtonPress = this.onLoginButtonPress.bind(this);
+    this.onSignupSuccess = this.onSignupSuccess.bind(this);
+    this.onLoginSuccess = this.onLoginSuccess.bind(this);
+    this.onSignupFail = this.onSignupFail.bind(this);
+    this.onLoginFail = this.onLoginFail.bind(this);
+  }
 
-  onSignupBtnPress() {
+  onSignupButtonPress() {
     const { email, password } = this.state;
     // clear error message
     this.setState({
       error: '',
-      loading: true,
+      signupLoading: true,
     });
     // https://firebase.google.com/docs/auth/web/password-auth
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('Signup success');
-        this.setState({
-          email: '',
-          password: '',
-          error: '',
-          loading: false,
-        });
-      })
-      .catch(({ code, message }) => {
-        console.log(`${code}: ${message}`);
-        this.setState({
-          error: message,
-        });
-      }
-    );
+      .then(this.onSignupSuccess)
+      .catch(this.onSignupFail);
   }
 
-  onLoginBtnPress() {
+  onLoginButtonPress() {
     const { email, password } = this.state;
     // clear error message
     this.setState({
       error: '',
-      loading: true,
+      loginLoading: true,
     });
     // https://firebase.google.com/docs/auth/web/password-auth
     firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('Login success');
-        this.setState({
-          email: '',
-          password: '',
-          error: '',
-          loading: false,
-        });
-      })
-      .catch(({ code, message }) => {
-        console.log(`${code}: ${message}`);
-        this.setState({
-          error: message,
-        });
-      }
-    );
+      .then(this.onLoginSuccess)
+      .catch(this.onLoginFail);
   }
 
-  renderSignupBtn() {
-    if (this.state.loading) {
-      return <Spinner size='small' />;
+  onSignupSuccess() {
+    this.setState({
+      email: '',
+      password: '',
+      error: '',
+      signupLoading: false,
+    });
+  }
+
+  onLoginSuccess() {
+    this.setState({
+      email: '',
+      password: '',
+      error: '',
+      loginLoading: false,
+    });
+  }
+
+  onSignupFail() {
+    this.setState({
+      error: 'Signup Failed.',
+      signupLoading: false,
+    });
+  }
+
+  onLoginFail() {
+    this.setState({
+      error: 'Login Failed.',
+      loginLoading: false,
+    });
+  }
+
+  renderSignupButton() {
+    if (this.state.signupLoading) {
+      return <Spinner size="small" />;
     }
     return (
-      <Button onPress={this.onSignupBtnPress.bind(this)}>
+      <Button onPress={this.onSignupButtonPress}>
         Signup
       </Button>
     );
   }
 
-  renderLoginBtn() {
-    if (this.state.loading) {
-      return <Spinner size='small' />;
+  renderLoginButton() {
+    if (this.state.loginLoading) {
+      return <Spinner size="small" />;
     }
     return (
-      <Button onPress={this.onLoginBtnPress.bind(this)}>
+      <Button onPress={this.onLoginButtonPress}>
         Login
       </Button>
     );
@@ -93,21 +106,20 @@ export default class LoginForm extends Component {
       <Card>
         <CardSection>
           <Input
-            label='Email'
+            label="Email"
+            placeholder="test@gmail.com"
             value={this.state.email}
             onChangeText={email => this.setState({ email })}
-            placeholder='test@gmail.com'
-            secureTextEntry={false}
           />
         </CardSection>
 
         <CardSection>
           <Input
-            label='Password'
+            secureTextEntry
+            label="Password"
+            placeholder="password"
             value={this.state.password}
             onChangeText={password => this.setState({ password })}
-            placeholder='password'
-            secureTextEntry
           />
         </CardSection>
 
@@ -116,19 +128,20 @@ export default class LoginForm extends Component {
         </Text>
 
         <CardSection>
-          {this.renderSignupBtn()}
-          {this.renderLoginBtn()}
+          {this.renderSignupButton()}
+          {this.renderLoginButton()}
         </CardSection>
       </Card>
     );
   }
 }
 
-
 const styles = {
   errorTextStyle: {
     fontSize: 20,
     alignSelf: 'center',
-    color: 'red',
-  },
+    color: 'red'
+  }
 };
+
+export default LoginForm;
