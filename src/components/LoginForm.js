@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { Text } from 'react-native';
 import firebase from 'firebase';
 
-import { Button, Card, CardSection, Input } from './common';
+import { Button, Card, CardSection, Input, Spinner } from './common';
 
 export default class LoginForm extends Component {
   state = {
     email: '',
     password: '',
     error: '',
+    loading: false,
   };
 
   onSignupBtnPress() {
@@ -16,9 +17,19 @@ export default class LoginForm extends Component {
     // clear error message
     this.setState({
       error: '',
+      loading: true,
     });
     // https://firebase.google.com/docs/auth/web/password-auth
     firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('Signup success');
+        this.setState({
+          email: '',
+          password: '',
+          error: '',
+          loading: false,
+        });
+      })
       .catch(({ code, message }) => {
         console.log(`${code}: ${message}`);
         this.setState({
@@ -33,15 +44,47 @@ export default class LoginForm extends Component {
     // clear error message
     this.setState({
       error: '',
+      loading: true,
     });
     // https://firebase.google.com/docs/auth/web/password-auth
     firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('Login success');
+        this.setState({
+          email: '',
+          password: '',
+          error: '',
+          loading: false,
+        });
+      })
       .catch(({ code, message }) => {
         console.log(`${code}: ${message}`);
         this.setState({
           error: message,
         });
       }
+    );
+  }
+
+  renderSignupBtn() {
+    if (this.state.loading) {
+      return <Spinner size='small' />;
+    }
+    return (
+      <Button onPress={this.onSignupBtnPress.bind(this)}>
+        Signup
+      </Button>
+    );
+  }
+
+  renderLoginBtn() {
+    if (this.state.loading) {
+      return <Spinner size='small' />;
+    }
+    return (
+      <Button onPress={this.onLoginBtnPress.bind(this)}>
+        Login
+      </Button>
     );
   }
 
@@ -73,12 +116,8 @@ export default class LoginForm extends Component {
         </Text>
 
         <CardSection>
-          <Button onPress={this.onSignupBtnPress.bind(this)}>
-            Signup
-          </Button>
-          <Button onPress={this.onLoginBtnPress.bind(this)}>
-            Login
-          </Button>
+          {this.renderSignupBtn()}
+          {this.renderLoginBtn()}
         </CardSection>
       </Card>
     );
